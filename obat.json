@@ -1,0 +1,42 @@
+[
+  {
+    "namaObat": "promag",
+    "keterangan": "sakit perut",
+    "harga": "10,000"
+  },
+  {
+    "namaObat": "paracetamol",
+    "keterangan": "pusing",
+    "harga": "5,000"
+  },
+  {
+    "namaObat": "obh combi",
+    "keterangan": "batuk",
+    "harga": "20,000"
+  },
+  {
+    "namaObat": "panadol",
+    "keterangan": "flu dan batuk",
+    "harga": "15,000"
+  },
+  {
+    "namaObat": "captopril",
+    "keterangan": "hipertensi",
+    "harga": "1,000"
+  },
+  {
+    "namaObat": "pumpitor",
+    "keterangan": "lambung",
+    "harga": "20,000"
+  },
+  {
+    "namaObat": "diatabs",
+    "keterangan": "diare",
+    "harga": "5,000"
+  },
+  {
+    "namaObat": "sanprima",
+    "keterangan": "antibiotik",
+    "harga": "5,000"
+  }
+]

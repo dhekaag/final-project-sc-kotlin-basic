@@ -1,24 +1,48 @@
 package controllers
 
-import data.UserModels.findUser
+
+import app.homeScreen
 import app.registerForm
 import data.Admin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import models.UserModels
+import constant.isLoading
 
 
 class LoginController{
-    val admin = Admin()
-    fun login() {
+    private val admin = Admin()
+
+    fun login()= runBlocking {
         first@ while (true){
-            print("username : ")
+            print("\nusername : ")
             val lUsername = readln()
             print("password : ")
             val lPassword = readln()
 
-
             if (lUsername == "admin" && lPassword == "admin"){
-                while (true){
-                    println("")
-                    print("""
+                adminDashboard()
+                break@first
+            }
+            val user = UserModels.findUser(lUsername, lPassword)
+            if (user != null) {
+                println(isLoading)
+                launch {
+                    delay(2_000)
+                    homeScreen(username = user.username.toString())
+                }
+                break@first
+            } else {
+                println("username atau password salah, silahkan masukan yang benar!!!")
+            }
+        }
+    }
+
+    private fun adminDashboard(){
+        while (true){
+            println("")
+            print("""
                         Menu:
                         1. Create user
                         2. Show user
@@ -26,26 +50,16 @@ class LoginController{
                         4. Exit
                         Pilih menu:
                     """.trimIndent())
-                    val userInput = readln()
-                    when(userInput){
-                        "1" -> registerForm(admin)
-                        "2" -> admin.showUsersAsAdmin()
-                        "3" -> admin.deleteUsersAsAdmin()
-                        "4" -> {
-                            println("user logout\n")
-                            break@first
-                        }
-
-                        else -> println("nomor tidak tersedia, silahkan masukan nomor yang tersedia!\n")
-                    }
+            val userInput = readln()
+            when(userInput){
+                "1" -> registerForm(admin)
+                "2" -> admin.showUsersAsAdmin()
+                "3" -> admin.deleteUsersAsAdmin()
+                "4" -> {
+                    println("user logout\n")
+                    break
                 }
-            }
-            val user = findUser(lUsername, lPassword)
-            if (user != null) {
-                println("Login berhasil sebagai pengguna dengan username: ${user.getUsername()}")
-                break
-            } else {
-                println("username atau password salah, silahkan masukan yang benar!!!")
+                else -> println("nomor tidak tersedia, silahkan masukan nomor yang tersedia!\n")
             }
         }
     }

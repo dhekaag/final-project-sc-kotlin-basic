@@ -1,16 +1,15 @@
 package data
 
-import data.UserModels.showUsers
+import models.UserModels
 
 class Admin: Users(){
-
 
     override fun notification(username: String) {
         println("akun $username, berhasil ditambahkan oleh admin\n")
     }
 
     fun showUsersAsAdmin(){
-        showUsers()
+        UserModels.showUsers()
     }
 
     fun deleteUsersAsAdmin(){
