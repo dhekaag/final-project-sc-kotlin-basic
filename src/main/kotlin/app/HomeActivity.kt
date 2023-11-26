@@ -1,9 +1,8 @@
 package app
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import models.ObatModels
 import constant.*
+import kotlinx.coroutines.*
 import java.text.DecimalFormat
 
 fun homeScreen(username: String){
@@ -17,7 +16,7 @@ fun homeScreen(username: String){
     }
 }
 
-fun resep() = runBlocking{
+private fun resep() = runBlocking{
     val dataObat = ObatModels
     val resepDokter: MutableList<String> = mutableListOf() // chart resep dokter
 
@@ -25,6 +24,7 @@ fun resep() = runBlocking{
     while (true){
         print(resepBody)
         val userInput = readln()
+
         if (userInput.equals("selesai", ignoreCase = true)){
             print(ensureUser)
             val input = readln()
@@ -38,9 +38,12 @@ fun resep() = runBlocking{
         }
         val obat = dataObat.findMedicine(namaObat = userInput, keluhan = null)
         if (obat != null){
-            println(isLoading)
-            delay(1_000)
-            dataObat.showMedicine(namaObat = userInput, keluhan = null)
+            val showMedicine: Job = launch {
+                println(isLoading)
+                delay(1_000)
+                dataObat.showMedicine(namaObat = userInput, keluhan = null)
+            }
+            showMedicine.join()
             resepDokter.add(userInput)
         } else{
             println(isLoading)
@@ -51,7 +54,7 @@ fun resep() = runBlocking{
 }
 
 
-fun nonResep() = runBlocking{
+private fun nonResep() = runBlocking{
     val dataObat = ObatModels
     val dataKeluhan: MutableList<String> = mutableListOf() // chart keluhan user
 
@@ -59,6 +62,7 @@ fun nonResep() = runBlocking{
     while (true){
         print(nonResepBody)
         val userInput = readln()
+
         if (userInput.equals("selesai", ignoreCase = true)){
             print(ensureUser)
             val input = readln()
@@ -72,9 +76,12 @@ fun nonResep() = runBlocking{
         }
         val keluhan = dataObat.findMedicine(namaObat = null, keluhan = userInput)
         if (keluhan != null){
-            println(isLoading)
-            delay(1_000)
-            dataObat.showMedicine(namaObat = null, keluhan = userInput)
+            val showMedicine: Job = launch {
+                println(isLoading)
+                delay(1_000)
+                dataObat.showMedicine(namaObat = null, keluhan = userInput)
+            }
+            showMedicine.join()
             dataKeluhan.add(userInput)
         } else{
             println(isLoading)
@@ -84,7 +91,7 @@ fun nonResep() = runBlocking{
     }
 }
 
-fun payment(resepDokter: MutableList<String>?, nonResep: MutableList<String>? )= runBlocking{
+private fun payment(resepDokter: MutableList<String>?, nonResep: MutableList<String>? )= runBlocking{
     var totalHarga = 0
     val dataObat = ObatModels.dataObat
 
